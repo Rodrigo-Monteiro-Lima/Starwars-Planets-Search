@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import './App.css';
 import Table from './components/Table';
 import AppContext from './context/AppContext';
+import Filters from './components/FIlters';
 
 function App() {
   const { fetchPlanets } = useContext(AppContext);
@@ -9,7 +10,10 @@ function App() {
     fetchPlanets('https://swapi-trybe.herokuapp.com/api/planets/');
   }, []);
   return (
-    <div><Table /></div>
+    <div>
+      <Filters />
+      <Table />
+    </div>
   );
 }
 

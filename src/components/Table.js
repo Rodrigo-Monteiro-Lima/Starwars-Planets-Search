@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import AppContext from '../context/AppContext';
 
 function Table() {
-  const { filterData, isLoading } = useContext(AppContext);
+  const { filterData, isLoading, search } = useContext(AppContext);
   if (isLoading) return <p>Loading...</p>;
   return (
     <div>
@@ -25,7 +25,8 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {filterData
+          {filterData.filter((plan) => plan.name.toLowerCase()
+            .includes(search.toLowerCase()))
             .map((planet) => (
               <tr key={ planet.name }>
                 <td>{planet.name}</td>
