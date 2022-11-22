@@ -6,11 +6,44 @@ function AppProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [amount, setAmount] = useState(0);
+  // const [filters, setFilters] = useState([]);
   const [comparison, setComparison] = useState('maior que');
   const [data, setData] = useState([]);
   const [errors, setErrors] = useState(false);
   const [filterData, setFilterData] = useState([]);
+  // const [selectedCol, setSelectedCol] = useState([]);
+  const [colOpt, setColOpt] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
   const [column, setColumn] = useState('population');
+
+  // const handleOpt = (arr) => {
+  //   const newCols = arr.reduce((acc, curr) => {
+  //     const cols = acc.filter((el) => el !== curr);
+  //     return cols;
+  //   }, colOpt);
+  //   setColOpt(newCols);
+  //   setColumn(newCols[0]);
+  // };
+
+  const handleFilterButton = (obj) => {
+    if (obj.comparison === 'maior que') {
+      setFilterData(filterData.filter((planet) => (+planet[obj.column]) > (+obj.amount)));
+    }
+    if (obj.comparison === 'menor que') {
+      setFilterData(filterData.filter((planet) => (+planet[obj.column]) < (+obj.amount)));
+    }
+    if (obj.comparison === 'igual a') {
+      setFilterData(filterData
+        .filter((planet) => (+planet[obj.column]) === (+obj.amount)));
+    }
+    setAmount(0);
+    setComparison('maior que');
+  };
 
   const fetchPlanets = async (url) => {
     try {
@@ -39,11 +72,16 @@ function AppProvider({ children }) {
     amount,
     comparison,
     filterData,
+    // filters,
+    // selectedCol,
+    colOpt,
     fetchPlanets,
     setAmount,
     setColumn,
     setComparison,
     setSearch,
+    handleFilterButton,
+    setColOpt,
   }), [data, isLoading, errors, search, column, comparison, amount, filterData]);
 
   return (
