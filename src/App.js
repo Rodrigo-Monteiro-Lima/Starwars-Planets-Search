@@ -5,7 +5,8 @@ import AppContext from './context/AppContext';
 import Filters from './components/FIlters';
 
 function App() {
-  const { fetchPlanets } = useContext(AppContext);
+  const { fetchPlanets, errors } = useContext(AppContext);
+  console.log('erros', errors);
   useEffect(() => {
     fetchPlanets('https://swapi-trybe.herokuapp.com/api/planets/');
   }, []);
