@@ -6,12 +6,12 @@ function AppProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [amount, setAmount] = useState(0);
-  // const [filters, setFilters] = useState([]);
+  const [filters, setFilters] = useState([]);
   const [comparison, setComparison] = useState('maior que');
   const [data, setData] = useState([]);
   const [errors, setErrors] = useState(false);
   const [filterData, setFilterData] = useState([]);
-  // const [selectedCol, setSelectedCol] = useState([]);
+  const [selectedCol, setSelectedCol] = useState([]);
   const [colOpt, setColOpt] = useState([
     'population',
     'orbital_period',
@@ -21,18 +21,22 @@ function AppProvider({ children }) {
   ]);
   const [column, setColumn] = useState('population');
 
-  // const handleOpt = (arr) => {
-  //   const newCols = arr.reduce((acc, curr) => {
-  //     const cols = acc.filter((el) => el !== curr);
-  //     return cols;
-  //   }, colOpt);
-  //   setColOpt(newCols);
-  //   setColumn(newCols[0]);
-  // };
+  const handleOpt = (arr) => {
+    const newCols = arr.reduce((acc, curr) => {
+      const cols = acc.filter((el) => el !== curr);
+      return cols;
+    }, colOpt);
+    setColOpt(newCols);
+    setColumn(newCols[0]);
+  };
 
   const handleFilterButton = (obj) => {
+    const arrayFilter = [...filters, obj];
+    const cols = [...selectedCol, obj.column];
+    handleOpt(cols);
     if (obj.comparison === 'maior que') {
-      setFilterData(filterData.filter((planet) => (+planet[obj.column]) > (+obj.amount)));
+      setFilterData(filterData
+        .filter((planet) => (+planet[obj.column]) > (+obj.amount)));
     }
     if (obj.comparison === 'menor que') {
       setFilterData(filterData.filter((planet) => (+planet[obj.column]) < (+obj.amount)));
@@ -41,6 +45,8 @@ function AppProvider({ children }) {
       setFilterData(filterData
         .filter((planet) => (+planet[obj.column]) === (+obj.amount)));
     }
+    setFilters(arrayFilter);
+    setSelectedCol(cols);
     setAmount(0);
     setComparison('maior que');
   };
@@ -72,8 +78,8 @@ function AppProvider({ children }) {
     amount,
     comparison,
     filterData,
-    // filters,
-    // selectedCol,
+    filters,
+    selectedCol,
     colOpt,
     fetchPlanets,
     setAmount,
@@ -82,7 +88,19 @@ function AppProvider({ children }) {
     setSearch,
     handleFilterButton,
     setColOpt,
-  }), [data, isLoading, errors, search, column, comparison, amount, filterData]);
+  }), [
+    data,
+    isLoading,
+    errors,
+    search,
+    column,
+    comparison,
+    amount,
+    filterData,
+    filters,
+    selectedCol,
+    colOpt,
+  ]);
 
   return (
     <AppContext.Provider value={ values }>

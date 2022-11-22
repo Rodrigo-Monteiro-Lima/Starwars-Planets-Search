@@ -2,10 +2,15 @@ import React, { useContext } from 'react';
 import AppContext from '../context/AppContext';
 
 function Table() {
-  const { filterData, isLoading, search } = useContext(AppContext);
+  const { filterData, isLoading, search, filters } = useContext(AppContext);
   if (isLoading) return <p>Loading...</p>;
   return (
     <div>
+      {filters.map((filter) => (
+        <div key={ filter.column }>
+          {`${filter.column} ${filter.comparison} ${filter.amount}`}
+        </div>
+      ))}
       <table>
         <thead>
           <tr>
