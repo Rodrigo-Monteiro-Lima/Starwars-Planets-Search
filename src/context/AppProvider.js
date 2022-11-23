@@ -20,6 +20,8 @@ function AppProvider({ children }) {
     'surface_water',
   ]);
   const [column, setColumn] = useState('population');
+  const [order, setOrder] = useState();
+  const [orderColumn, setOrderColumn] = useState('population');
 
   const handleRemoveFilter = (col) => {
     const newFilters = filters.filter((fil) => fil.column !== col);
@@ -44,6 +46,20 @@ function AppProvider({ children }) {
             .filter((planet) => (+planet[filt.column]) === (+filt.amount)));
         }
       });
+    }
+  };
+
+  const handleSort = (obj) => {
+    const noUnknown = filterData.filter((planet) => planet[obj.column] !== 'unknown');
+    const unknown = filterData.filter((planet) => planet[obj.column] === 'unknown');
+    if (obj.order === 'ASC') {
+      const sorted = noUnknown
+        .sort((a, b) => Number(a[obj.column]) - Number(b[obj.column]));
+      setFilterData([...sorted, ...unknown]);
+    } else {
+      const sorted = noUnknown
+        .sort((a, b) => Number(b[obj.column]) - Number(a[obj.column]));
+      setFilterData([...sorted, ...unknown]);
     }
   };
 
@@ -133,6 +149,11 @@ function AppProvider({ children }) {
     filters,
     selectedCol,
     colOpt,
+    order,
+    orderColumn,
+    setOrderColumn,
+    handleSort,
+    setOrder,
     setAmount,
     setColumn,
     setComparison,
@@ -153,6 +174,8 @@ function AppProvider({ children }) {
     filters,
     selectedCol,
     colOpt,
+    order,
+    orderColumn,
   ]);
 
   return (

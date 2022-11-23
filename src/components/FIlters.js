@@ -2,6 +2,13 @@ import React, { useContext } from 'react';
 import AppContext from '../context/AppContext';
 
 function Filters() {
+  const cols = [
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ];
   const {
     colOpt,
     search,
@@ -14,6 +21,11 @@ function Filters() {
     setAmount,
     handleFilterButton,
     handleRemoveAllFiters,
+    handleSort,
+    order,
+    setOrder,
+    orderColumn,
+    setOrderColumn,
   } = useContext(AppContext);
   return (
     <form>
@@ -78,6 +90,50 @@ function Filters() {
       >
         Remove filters
 
+      </button>
+      <label htmlFor="column-order">
+        <select
+          name="column"
+          id="column"
+          value={ orderColumn }
+          onChange={ (e) => setOrderColumn(e.target.value) }
+          data-testid="column-sort"
+        >
+          {cols.map((col) => <option key={ col } value={ col }>{col}</option>)}
+        </select>
+      </label>
+      <label htmlFor="ASC">
+        <input
+          type="radio"
+          name="order"
+          id="ASC"
+          value="ASC"
+          checked={ order === 'ASC' }
+          onChange={ ({ target }) => setOrder(target.value) }
+          data-testid="column-sort-input-asc"
+        />
+        {' '}
+        Ascendente
+      </label>
+      <label htmlFor="DESC">
+        <input
+          type="radio"
+          name="order"
+          id="DESC"
+          value="DESC"
+          checked={ order === 'DESC' }
+          onChange={ ({ target }) => setOrder(target.value) }
+          data-testid="column-sort-input-desc"
+        />
+        {' '}
+        Descendente
+      </label>
+      <button
+        type="button"
+        data-testid="column-sort-button"
+        onClick={ () => handleSort({ order, column: orderColumn }) }
+      >
+        Filtrar
       </button>
     </form>
   );
