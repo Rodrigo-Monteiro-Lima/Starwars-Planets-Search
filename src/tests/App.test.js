@@ -7,6 +7,8 @@ import AppProvider from '../context/AppProvider';
 import mockData from '../helpers/mocks/mockData';
 import mockFetch from '../helpers/mocks/mockFetch';
 
+jest.setTimeout(50000);
+
 describe("test app", () => {
   beforeEach(() => {
     // jest.spyOn(global, 'fetch');
@@ -160,7 +162,7 @@ describe("test app", () => {
       <App />
     </AppProvider>
     );
-    await new Promise((r) => setTimeout(r, 3000))
+    await new Promise((r) => setTimeout(r, 40000))
     const search = await screen.findByTestId('name-filter');
     userEvent.type(search, 'tat');
     expect(search).toHaveDisplayValue('tat');
