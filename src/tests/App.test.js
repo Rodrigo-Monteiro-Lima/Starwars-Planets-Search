@@ -167,6 +167,5 @@ describe("test app", () => {
     const btn = await screen.findByRole('button', {name: "Filter"});
     userEvent.click(btn);
     const algo = await screen.findByRole('i');
-    expect()
   });
 })
