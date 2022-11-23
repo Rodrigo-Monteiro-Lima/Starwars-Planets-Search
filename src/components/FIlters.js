@@ -133,7 +133,7 @@ function Filters() {
         data-testid="column-sort-button"
         onClick={ () => handleSort({ order, column: orderColumn }) }
       >
-        Filtrar
+        Sort
       </button>
     </form>
   );

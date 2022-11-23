@@ -4,6 +4,7 @@ import AppContext from './AppContext';
 
 function AppProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [sort, setSort] = useState(false);
   const [search, setSearch] = useState('');
   const [amount, setAmount] = useState(0);
   const [filters, setFilters] = useState([]);
@@ -22,6 +23,21 @@ function AppProvider({ children }) {
   const [column, setColumn] = useState('population');
   const [order, setOrder] = useState();
   const [orderColumn, setOrderColumn] = useState('population');
+
+  const handleSort = (obj) => {
+    setSort(true);
+    const noUnknown = filterData.filter((planet) => planet[obj.column] !== 'unknown');
+    const unknown = filterData.filter((planet) => planet[obj.column] === 'unknown');
+    if (obj.order === 'ASC') {
+      const sorted = noUnknown
+        .sort((a, b) => Number(a[obj.column]) - Number(b[obj.column]));
+      setFilterData([...sorted, ...unknown]);
+    } else {
+      const sorted = noUnknown
+        .sort((a, b) => Number(b[obj.column]) - Number(a[obj.column]));
+      setFilterData([...sorted, ...unknown]);
+    }
+  };
 
   const handleRemoveFilter = (col) => {
     const newFilters = filters.filter((fil) => fil.column !== col);
@@ -47,23 +63,14 @@ function AppProvider({ children }) {
         }
       });
     }
-  };
-
-  const handleSort = (obj) => {
-    const noUnknown = filterData.filter((planet) => planet[obj.column] !== 'unknown');
-    const unknown = filterData.filter((planet) => planet[obj.column] === 'unknown');
-    if (obj.order === 'ASC') {
-      const sorted = noUnknown
-        .sort((a, b) => Number(a[obj.column]) - Number(b[obj.column]));
-      setFilterData([...sorted, ...unknown]);
-    } else {
-      const sorted = noUnknown
-        .sort((a, b) => Number(b[obj.column]) - Number(a[obj.column]));
-      setFilterData([...sorted, ...unknown]);
+    if (sort) {
+      const ord = order;
+      handleSort({ order: ord, column: orderColumn });
     }
   };
 
   const handleRemoveAllFiters = () => {
+    setSort(false);
     setFilters([]);
     setColOpt([
       'population',
