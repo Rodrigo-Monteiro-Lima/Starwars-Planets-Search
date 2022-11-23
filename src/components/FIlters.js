@@ -13,6 +13,7 @@ function Filters() {
     amount,
     setAmount,
     handleFilterButton,
+    handleRemoveAllFiters,
   } = useContext(AppContext);
   return (
     <form>
@@ -68,6 +69,14 @@ function Filters() {
         onClick={ () => handleFilterButton({ column, comparison, amount }) }
       >
         Filter
+
+      </button>
+      <button
+        type="button"
+        onClick={ () => handleRemoveAllFiters() }
+        data-testid="button-remove-filters"
+      >
+        Remove filters
 
       </button>
     </form>

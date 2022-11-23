@@ -5,11 +5,21 @@ import AppContext from './context/AppContext';
 import Filters from './components/FIlters';
 
 function App() {
-  const { fetchPlanets, errors } = useContext(AppContext);
-  console.log('erros', errors);
+  const { fetchPlanets } = useContext(AppContext);
   useEffect(() => {
     fetchPlanets('https://swapi-trybe.herokuapp.com/api/planets/');
   }, []);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   fetch('https://swapi-trybe.herokuapp.com/api/planets/')
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       setData(result.results);
+  //       setFilterData(result.results);
+  //     })
+  //     .catch((e) => setErrors(e))
+  //     .then(() => setIsLoading(false));
+  // }, []);
   return (
     <div>
       <Filters />

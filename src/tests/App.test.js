@@ -7,6 +7,10 @@ import mockFetch from '../helpers/mocks/mockFetch';
 
 describe("test app", () => {
   beforeEach(() => {
+    // jest.spyOn(global, 'fetch');
+    // global.fetch.mockResolvedValue({
+    // json: jest.fn().mockResolvedValue(mockData),
+    // });
     global.fetch = jest.fn(mockFetch);
   });
 
@@ -73,7 +77,7 @@ describe("test app", () => {
       expect(option).toBeInTheDocument();
       expect(option).toHaveTextContent(optionsArr[index]);
     });
-    const btn = screen.getByRole('button');
+    const btn = screen.getByRole('button', {name: "Filter"});
     expect(btn).toBeInTheDocument();
     expect(btn).toHaveTextContent('Filter');
     expect(btn).toHaveAttribute('data-testid', 'button-filter')
@@ -117,7 +121,7 @@ describe("test app", () => {
       expect(option).toBeInTheDocument();
       expect(option).toHaveTextContent(optionsArr[index]);
     });
-    const btn = await screen.findByRole('button');
+    const btn = await screen.findByRole('button', {name: "Filter"});
     expect(btn).toBeInTheDocument();
     expect(btn).toHaveTextContent('Filter');
     expect(btn).toHaveAttribute('data-testid', 'button-filter');

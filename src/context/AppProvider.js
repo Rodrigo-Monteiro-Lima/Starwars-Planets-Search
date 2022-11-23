@@ -21,6 +21,46 @@ function AppProvider({ children }) {
   ]);
   const [column, setColumn] = useState('population');
 
+  const handleRemoveFilter = (col) => {
+    const newFilters = filters.filter((fil) => fil.column !== col);
+    setFilters(newFilters);
+    const newCols = [...colOpt, col];
+    setSelectedCol(selectedCol.filter((el) => el !== col));
+    setColOpt(newCols);
+    setColumn(newCols[0]);
+    if (newFilters.length === 0) {
+      setFilterData(data);
+    } else {
+      newFilters.forEach((filt) => {
+        if (filt.comparison === 'maior que') {
+          setFilterData(data
+            .filter((planet) => (+planet[filt.column]) > (+filt.amount)));
+        }
+        if (filt.comparison === 'menor que') {
+          setFilterData(data.filter((planet) => (+planet[filt.column]) < (+filt.amount)));
+        }
+        if (filt.comparison === 'igual a') {
+          setFilterData(data
+            .filter((planet) => (+planet[filt.column]) === (+filt.amount)));
+        }
+      });
+    }
+  };
+
+  const handleRemoveAllFiters = () => {
+    setFilters([]);
+    setColOpt([
+      'population',
+      'orbital_period',
+      'diameter',
+      'rotation_period',
+      'surface_water',
+    ]);
+    setFilterData(data);
+    setSelectedCol([]);
+    setColumn('populations');
+  };
+
   const handleOpt = (arr) => {
     const newCols = arr.reduce((acc, curr) => {
       const cols = acc.filter((el) => el !== curr);
@@ -69,6 +109,18 @@ function AppProvider({ children }) {
     }
   };
 
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   fetch('https://swapi-trybe.herokuapp.com/api/planets/')
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       setData(result.results);
+  //       setFilterData(result.results);
+  //     })
+  //     .catch((e) => setErrors(e))
+  //     .then(() => setIsLoading(false));
+  // }, []);
+
   const values = useMemo(() => ({
     data,
     isLoading,
@@ -81,13 +133,14 @@ function AppProvider({ children }) {
     filters,
     selectedCol,
     colOpt,
-    fetchPlanets,
     setAmount,
     setColumn,
     setComparison,
     setSearch,
     handleFilterButton,
-    setColOpt,
+    handleRemoveAllFiters,
+    handleRemoveFilter,
+    fetchPlanets,
   }), [
     data,
     isLoading,
