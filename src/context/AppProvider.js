@@ -4,7 +4,7 @@ import AppContext from './AppContext';
 
 function AppProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [sort, setSort] = useState(false);
+  // const [sort, setSort] = useState(false);
   const [search, setSearch] = useState('');
   const [amount, setAmount] = useState(0);
   const [filters, setFilters] = useState([]);
@@ -25,7 +25,7 @@ function AppProvider({ children }) {
   const [orderColumn, setOrderColumn] = useState('population');
 
   const handleSort = (obj) => {
-    setSort(true);
+    // setSort(true);
     const noUnknown = filterData.filter((planet) => planet[obj.column] !== 'unknown');
     const unknown = filterData.filter((planet) => planet[obj.column] === 'unknown');
     if (obj.order === 'ASC') {
@@ -63,14 +63,14 @@ function AppProvider({ children }) {
         }
       });
     }
-    if (sort) {
-      const ord = order;
-      handleSort({ order: ord, column: orderColumn });
-    }
+    // if (sort) {
+    //   const ord = order;
+    //   handleSort({ order: ord, column: orderColumn });
+    // }
   };
 
   const handleRemoveAllFiters = () => {
-    setSort(false);
+    // setSort(false);
     setFilters([]);
     setColOpt([
       'population',
