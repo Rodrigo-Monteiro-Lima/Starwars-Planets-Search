@@ -1,8 +1,9 @@
-import { render, renderHook, screen } from '@testing-library/react';
+import { toBeInTheDocument } from '@testing-library/jest-dom/dist/matchers';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { act } from 'react-dom/test-utils';
 import App from '../App';
 import AppContext from '../context/AppContext';
+// import { act } from 'react-dom/test-utils';
 import AppProvider from '../context/AppProvider';
 import mockData from '../helpers/mocks/mockData';
 import mockFetch from '../helpers/mocks/mockFetch';
@@ -22,42 +23,26 @@ describe("test app", () => {
     global.fetch.mockClear();
   });
   it('Testing if the API is called properly', () => {
- 
-    const value = {filters: [], filterData: mockData, search: '', colOpt: [
-      'population',
-      'orbital_period',
-      'diameter',
-      'rotation_period',
-      'surface_water',
-    ], fetchPlanets: jest.fn(), amount: 0,}
-    
     render(
-    <AppContext.Provider value={value}>
+    <AppProvider>
       <App />
-    </AppContext.Provider>
+    </AppProvider>
     );
-    expect(value.fetchPlanets).toHaveBeenCalled();
-    expect(value.fetchPlanets).toHaveBeenCalledTimes(1);
-    expect(value.fetchPlanets).toHaveBeenCalledWith("https://swapi-trybe.herokuapp.com/api/planets/");
+    expect(global.fetch).toHaveBeenCalled();
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(global.fetch).toHaveBeenCalledWith("https://swapi-trybe.herokuapp.com/api/planets/");
   });
   it('Testing if render correctly', async () => {
     const optionsArr = [ 'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water', 'maior que', 'menor que', 'igual a', 'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
     const ths = ['Name', 'Rotation Period', 'Orbital Period', 'Diameter', 'Climate', 'Gravity', 'Terrain', 'Surface Water', 'Population', 'Films', 'Created', 'Edited', 'URL'];
-    const value = {filters: [], filterData: mockData, search: '', colOpt: [
-      'population',
-      'orbital_period',
-      'diameter',
-      'rotation_period',
-      'surface_water',
-    ], fetchPlanets: jest.fn(), amount: 0,}
-    const arr = mockData;
+    const arr = mockData.results;
     arr.map((data) => delete data.residents);
     const newArr = arr.map((el) => Object.values(el).flat().join('') );
     newArr.unshift('NameRotation PeriodOrbital PeriodDiameterClimateGravityTerrainSurface WaterPopulationFilmsCreatedEditedURL');
     render(
-    <AppContext.Provider value={value}>
+    <AppProvider>
       <App />
-    </AppContext.Provider>
+    </AppProvider>
     );
     const search = screen.getByTestId('name-filter');
     expect(search).toBeInTheDocument();
@@ -75,7 +60,7 @@ describe("test app", () => {
     expect(valueInput).toBeInTheDocument();
     expect(valueInput).toHaveAttribute('name', 'amount');
     expect(valueInput).toHaveAttribute('type', 'number');
-    const options = screen.getAllByRole('option');
+    const options = await screen.findAllByRole('option');
     expect(options).toHaveLength(13);
     options.forEach((option, index) => {
       expect(option).toBeInTheDocument();
@@ -85,7 +70,7 @@ describe("test app", () => {
     expect(btn).toBeInTheDocument();
     expect(btn).toHaveTextContent('Filter');
     expect(btn).toHaveAttribute('data-testid', 'button-filter')
-    const row = screen.getAllByRole('row');
+    const row = await screen.findAllByRole('row');
     row.forEach((rowEl, index) => {
       expect(rowEl).toBeInTheDocument();
       expect(rowEl).toHaveTextContent(newArr[index]);
@@ -95,7 +80,6 @@ describe("test app", () => {
       expect(column).toBeInTheDocument();
       expect(column).toHaveTextContent(ths[index]);
     });
-    // const algo = await screen.findByRole('i');
   });
   it('Testing provider', async () => {
     const optionsArr = [ 'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water', 'maior que', 'menor que', 'igual a', 'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
@@ -130,46 +114,36 @@ describe("test app", () => {
     expect(btn).toBeInTheDocument();
     expect(btn).toHaveTextContent('Filter');
     expect(btn).toHaveAttribute('data-testid', 'button-filter');
-    const row = await screen.findAllByRole('row')
   });
-  // it('Testing  ', async () => {
- 
-  //   // const value = {filters: [], filterData: mockData, search: '', colOpt: [
-  //   //   'population',
-  //   //   'orbital_period',
-  //   //   'diameter',
-  //   //   'rotation_period',
-  //   //   'surface_water',
-  //   // ], fetchPlanets: jest.fn(), amount: 0,}
-  //   // await act( async () => renderHook(() => ) )
-  //   render(<AppProvider><App /></AppProvider> );
-  //   const algo = await screen.findByRole('i');
-  // });
-  it('Testing if buttons work properly', async () => {
-    // const value = {filters: [], filterData: mockData, search: '', colOpt: [
-    //   'population',
-    //   'orbital_period',
-    //   'diameter',
-    //   'rotation_period',
-    //   'surface_water',
-    // ], fetchPlanets: jest.fn(), amount: 0,}
-     jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-    json: jest.fn().mockResolvedValue(mockData),
-    });
-    render(
-    <AppProvider>
-      <App />
-    </AppProvider>
-    );
-    // await new Promise((r) => setTimeout(r, 40000))
+  it('Testing if filters work properly', async () => {
+    const planets = ['Tatooine', 'Naboo', 'Kamino', 'Alderaan', 'Yavin IV', 'Hoth', 'Dagobah', 'Bespin', 'Endor',  'Coruscant'];
+      render(
+      <AppProvider>
+        <App />
+      </AppProvider>
+      );
     const search = await screen.findByTestId('name-filter');
-    userEvent.type(search, 'tat');
-    expect(search).toHaveDisplayValue('tat');
+    userEvent.type(search, 'oo');
+    expect(search).toHaveDisplayValue('oo');
+    const tatooine = await screen.findByText('Tatooine');
+    expect(tatooine).toBeInTheDocument()
+    const naboo = await screen.findByText('Naboo');
+    expect(naboo).toBeInTheDocument();
+    planets.filter((planet) => !planet.includes('oo')).forEach((planet) => {
+      expect(screen.queryByText(planet)).not.toBeInTheDocument();
+    });
+    userEvent.clear(search);
+    planets.forEach((planet) => {
+      expect(screen.queryByText(planet)).toBeInTheDocument();
+    })
     const btn = await screen.findByRole('button', {name: "Filter"});
     userEvent.click(btn);
     const filterText = await screen.findByText('population maior que 0')
     expect(filterText).toBeInTheDocument();
+    const hoth = screen.queryByText('Hoth');
+    expect(hoth).not.toBeInTheDocument();
+    const dagobah = screen.queryByText('Dagobah');
+    expect(dagobah).not.toBeInTheDocument();
     const options = await screen.findAllByRole('option');
     expect(options).toHaveLength(12);
     expect(options[0]).not.toHaveTextContent('population');
@@ -177,14 +151,26 @@ describe("test app", () => {
     expect(column).toHaveDisplayValue('orbital_period')
     const xBtn = await screen.findByRole('button', {name: 'X'});
     userEvent.click(xBtn);
+    expect(screen.queryByText('Hoth')).toBeInTheDocument();
+    expect(screen.queryByText('Dagobah')).toBeInTheDocument();
     expect(filterText).not.toBeInTheDocument();
     const newOptions = await screen.findAllByRole('option');
     expect(newOptions).toHaveLength(13);
     expect(newOptions[4]).toHaveTextContent('population');
     const comparison = await screen.findByTestId('comparison-filter');
-    userEvent.selectOptions(comparison, 'menor que')
+    userEvent.selectOptions(comparison, 'menor que');
+    const valueInput = await screen.findByTestId('value-filter');
+    userEvent.selectOptions(column, 'diameter')
+    userEvent.type(valueInput, '9000');
     userEvent.click(btn);
+    const filterText2 = await screen.findByText('diameter menor que 09000')
+    expect(screen.getByText('Hoth')).toBeInTheDocument();
+    expect(screen.getByText('Dagobah')).toBeInTheDocument();
+    expect(screen.getByText('Endor')).toBeInTheDocument();
     userEvent.selectOptions(comparison, 'igual a')
+    userEvent.clear(valueInput);
+    userEvent.type(valueInput, '304');
+    // expect(screen.getByText('Tatooine')).toBeInTheDocument();
     userEvent.click(btn);
     userEvent.click(btn);
     userEvent.click(btn);
@@ -196,9 +182,8 @@ describe("test app", () => {
     expect(newColumn).toHaveDisplayValue([])
     const filterText1 = await screen.findByText('population maior que 0')
     expect(filterText1).toBeInTheDocument();
-    const filterText2 = await screen.findByText('orbital_period menor que 0')
     expect(filterText2).toBeInTheDocument();
-    const filterText3 = await screen.findByText('diameter igual a 0')
+    const filterText3 = await screen.findByText('diameter menor que 09000')
     expect(filterText3).toBeInTheDocument();
     const filterText4 = await screen.findByText('rotation_period maior que 0')
     expect(filterText4).toBeInTheDocument();
@@ -216,6 +201,8 @@ describe("test app", () => {
     expect(newOptions3[0]).toHaveTextContent('population');
     const ascRadio = await screen.findByTestId('column-sort-input-asc');
     const descRadio = await screen.findByTestId('column-sort-input-desc');
+    const order = await screen.findByTestId('column-sort');
+    userEvent.selectOptions(order, 'diameter')
     expect(ascRadio).toBeInTheDocument();
     expect(descRadio).toBeInTheDocument();
     userEvent.click(ascRadio)
@@ -226,6 +213,54 @@ describe("test app", () => {
     expect(descRadio).toBeChecked();
     expect(ascRadio).not.toBeChecked();
     userEvent.click(sortBtn);
-    // const algo = await screen.findByRole('i');
+  });
+  it("Testing select options", async () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>
+      );
+    const comparison = await screen.findByTestId('comparison-filter');
+    const btn = await screen.findByRole('button', {name: "Filter"});
+    userEvent.click(btn);
+    userEvent.click(btn);
+    userEvent.click(btn);
+    userEvent.click(btn);
+    userEvent.click(btn);
+    const xBtns =  await screen.findAllByRole('button', {name: 'X'});
+    expect(xBtns).toHaveLength(5);
+    xBtns.forEach((xbtn) => {
+      userEvent.click(xbtn);
+    })
+    userEvent.selectOptions(comparison, 'menor que');
+    userEvent.click(btn);
+    userEvent.selectOptions(comparison, 'menor que');
+    userEvent.click(btn);
+    userEvent.selectOptions(comparison, 'menor que');
+    userEvent.click(btn);
+    userEvent.selectOptions(comparison, 'menor que');
+    userEvent.click(btn);
+    userEvent.selectOptions(comparison, 'menor que');
+    userEvent.click(btn);
+    const xBtns2 =  await screen.findAllByRole('button', {name: 'X'});
+    expect(xBtns2).toHaveLength(5);
+    xBtns2.forEach((xbtn) => {
+      userEvent.click(xbtn);
+    })
+    userEvent.selectOptions(comparison, 'igual a');
+    userEvent.click(btn);
+    userEvent.selectOptions(comparison, 'igual a');
+    userEvent.click(btn);
+    userEvent.selectOptions(comparison, 'igual a');
+    userEvent.click(btn);
+    userEvent.selectOptions(comparison, 'igual a');
+    userEvent.click(btn);
+    userEvent.selectOptions(comparison, 'igual a');
+    userEvent.click(btn);
+    const xBtns3 =  await screen.findAllByRole('button', {name: 'X'});
+    expect(xBtns3).toHaveLength(5);
+    xBtns3.forEach((xbtn) => {
+      userEvent.click(xbtn);
+    })
   });
 })

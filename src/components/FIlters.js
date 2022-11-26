@@ -79,6 +79,7 @@ function Filters() {
         type="button"
         data-testid="button-filter"
         onClick={ () => handleFilterButton({ column, comparison, amount }) }
+        disabled={ colOpt.length === 0 }
       >
         Filter
 

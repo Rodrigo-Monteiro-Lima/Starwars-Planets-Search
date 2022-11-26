@@ -10,7 +10,7 @@ function AppProvider({ children }) {
   const [filters, setFilters] = useState([]);
   const [comparison, setComparison] = useState('maior que');
   const [data, setData] = useState([]);
-  const [errors, setErrors] = useState(false);
+  // const [errors, setErrors] = useState(false);
   const [filterData, setFilterData] = useState([]);
   const [selectedCol, setSelectedCol] = useState([]);
   const [colOpt, setColOpt] = useState([
@@ -68,10 +68,17 @@ function AppProvider({ children }) {
     //   handleSort({ order: ord, column: orderColumn });
     // }
   };
+  // useEffect(() => {
+  //   if (sort) {
+  //     const ord = order;
+  //     handleSort({ order: ord, column: orderColumn });
+  //   }
+  // }, [filterData]);
 
   const handleRemoveAllFiters = () => {
     // setSort(false);
     setFilters([]);
+    setOrder();
     setColOpt([
       'population',
       'orbital_period',
@@ -81,7 +88,7 @@ function AppProvider({ children }) {
     ]);
     setFilterData(data);
     setSelectedCol([]);
-    setColumn('populations');
+    setColumn('population');
   };
 
   const handleOpt = (arr) => {
@@ -133,6 +140,10 @@ function AppProvider({ children }) {
   };
 
   // useEffect(() => {
+  //   fetchPlanets('https://swapi-trybe.herokuapp.com/api/planets/');
+  // }, []);
+
+  // useEffect(() => {
   //   setIsLoading(true);
   //   fetch('https://swapi-trybe.herokuapp.com/api/planets/')
   //     .then((response) => response.json())
@@ -147,7 +158,7 @@ function AppProvider({ children }) {
   const values = useMemo(() => ({
     data,
     isLoading,
-    errors,
+    // errors,
     search,
     column,
     amount,
@@ -172,7 +183,7 @@ function AppProvider({ children }) {
   }), [
     data,
     isLoading,
-    errors,
+    // errors,
     search,
     column,
     comparison,
