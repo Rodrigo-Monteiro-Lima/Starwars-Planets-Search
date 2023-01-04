@@ -6,7 +6,7 @@ function AppProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   // const [sort, setSort] = useState(false);
   const [search, setSearch] = useState('');
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState('');
   const [filters, setFilters] = useState([]);
   const [comparison, setComparison] = useState('maior que');
   const [data, setData] = useState([]);
@@ -117,7 +117,7 @@ function AppProvider({ children }) {
     }
     setFilters(arrayFilter);
     setSelectedCol(cols);
-    setAmount(0);
+    setAmount('');
     setComparison('maior que');
   };
 

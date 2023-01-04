@@ -1,0 +1,140 @@
+form {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.search {
+  align-items: center;
+  background-color: white;
+  border-radius: 5px;
+  color: black;
+  display: flex;
+  font-size: 1.563rem;
+  height: 32px;
+  margin: 3rem 0 2.688rem;
+}
+
+.search input {
+  border: none;
+  border-radius: 5px;
+  height: 32px;
+  padding-left: 1rem;
+  width: 671px;
+}
+
+.radios input {
+  accent-color: #fae60a;
+  height: 18px;
+  width: 18px;
+}
+
+.search:focus-within {
+  outline: auto;
+}
+
+.search input:focus {
+  outline: none;
+}
+
+.filters {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+}
+
+.filters label {
+  color: #aeaeae;
+  display: flex;
+  flex-direction: column;
+  font-family: Epilogue , sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+
+}
+
+option {
+  background: black;
+}
+
+select {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  color: white;
+  font-family: Epilogue , sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 18px;
+  width: 134px;
+}
+
+.amount {
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 5px;
+  color: white;
+  font-family: Epilogue , sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  height: 42px;
+  line-height: 18px;
+  padding-left: 1rem;
+  width: 91px;
+}
+
+button {
+  background-color: transparent;
+  border: 1px solid #fae60a;
+  border-radius: 5px;
+  color: #fae60a;
+  cursor: pointer;
+  font-family: Epilogue , sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  height: 65px;
+  line-height: 18px;
+  text-align: center;
+  text-transform: uppercase;
+  width: 91px;
+}
+
+button:hover {
+  opacity: 0.5;
+}
+
+button:disabled {
+  cursor: auto;
+  opacity: 0.1;
+}
+
+.radios {
+  display: flex;
+  flex-direction: column;
+  height: 47px;
+  justify-content: space-between;
+  width: 147px;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.radios label {
+  color: white;
+  display: flex;
+  flex-direction: row;
+  font-family: Epilogue , sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  gap: 11px;
+  line-height: 18px;
+}
+

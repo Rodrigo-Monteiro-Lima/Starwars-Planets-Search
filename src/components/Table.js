@@ -1,29 +1,16 @@
 import React, { useContext } from 'react';
 import AppContext from '../context/AppContext';
+import './Table.css';
 
 function Table() {
   const {
     filterData,
     isLoading,
     search,
-    filters,
-    handleRemoveFilter,
   } = useContext(AppContext);
   if (isLoading) return <p>Loading...</p>;
   return (
-    <div>
-      {filters.map((filter) => (
-        <div key={ filter.column } data-testid="filter">
-          <p>{`${filter.column} ${filter.comparison} ${filter.amount}`}</p>
-          <button
-            type="button"
-            onClick={ () => handleRemoveFilter(filter.column) }
-          >
-            X
-
-          </button>
-        </div>
-      ))}
+    <div className="table-container">
       <table>
         <thead>
           <tr>
@@ -57,13 +44,26 @@ function Table() {
                 <td>{planet.surface_water}</td>
                 <td>{planet.population}</td>
                 <td>
-                  {planet.films.map((film) => (
-                    <div key={ film }>{film}</div>
-                  ))}
+                  {/* <div style={ { display: 'flex', gap: '2px' } }>
+                    {planet.films.map((film) => (
+                      <div key={ film }>{`${film.split('/')[5]} º`}</div>
+                    ))}
+                  </div> */}
+                  {planet.films.map((film) => film.split('/')[5].concat('º')).join(', ')}
                 </td>
-                <td>{planet.created}</td>
-                <td>{planet.edited}</td>
-                <td>{planet.url}</td>
+                <td>
+                  {
+                    `${planet.created.split('.')[0].split('T')[0].split('-').reverse()
+                      .join('/')} at ${planet.created.split('.')[0].split('T')[1]}`
+                  }
+                </td>
+                <td>
+                  {
+                    `${planet.edited.split('.')[0].split('T')[0].split('-').reverse()
+                      .join('/')} at ${planet.edited.split('.')[0].split('T')[1]}`
+                  }
+                </td>
+                <td><a href={ planet.url } target="_blank" rel="noreferrer">Link</a></td>
               </tr>
             ))}
         </tbody>

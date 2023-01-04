@@ -1,30 +1,39 @@
 import React, { useContext, useEffect } from 'react';
 import './App.css';
+import { MdOutlineDeleteForever } from 'react-icons/md';
 import Table from './components/Table';
 import AppContext from './context/AppContext';
 import Filters from './components/FIlters';
 
 function App() {
-  const { fetchPlanets } = useContext(AppContext);
+  const { fetchPlanets, filters, handleRemoveFilter } = useContext(AppContext);
   useEffect(() => {
     fetchPlanets('https://swapi-trybe.herokuapp.com/api/planets/');
   }, []);
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   fetch('https://swapi-trybe.herokuapp.com/api/planets/')
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setData(result.results);
-  //       setFilterData(result.results);
-  //     })
-  //     .catch((e) => setErrors(e))
-  //     .then(() => setIsLoading(false));
-  // }, []);
   return (
-    <div>
-      <Filters />
-      <Table />
-    </div>
+    <main>
+      <div className="container">
+        <Filters />
+        <div className="filters-container">
+          {filters.map((filter) => (
+            <div
+              key={ filter.column }
+              data-testid="filter"
+              style={ { display: 'flex', gap: '5px', alignItems: 'center' } }
+            >
+              <p>{`${filter.column} ${filter.comparison} ${filter.amount}`}</p>
+              <button
+                type="button"
+                onClick={ () => handleRemoveFilter(filter.column) }
+              >
+                <MdOutlineDeleteForever />
+              </button>
+            </div>
+          ))}
+        </div>
+        <Table />
+      </div>
+    </main>
   );
 }
 
