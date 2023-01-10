@@ -8,7 +8,7 @@ import Filters from './components/FIlters';
 function App() {
   const { fetchPlanets, filters, handleRemoveFilter } = useContext(AppContext);
   useEffect(() => {
-    fetchPlanets('https://swapi-trybe.herokuapp.com/api/planets/');
+    fetchPlanets('https://swapi.dev/api/planets');
   }, []);
   return (
     <main>
